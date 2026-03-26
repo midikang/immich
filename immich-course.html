@@ -1,0 +1,2254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immich: A Photo Management App Course</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Custom Properties - Design System */
+        :root {
+            /* Colors - Warm Palette */
+            --color-bg-primary: #fdfbf7;
+            --color-bg-secondary: #f8f5f0;
+            --color-bg-tertiary: #f0ebe3;
+            --color-bg-dark: #1e1e2e;
+            --color-text-primary: #2a2a2a;
+            --color-text-secondary: #5a5a5a;
+            --color-text-muted: #8a8a8a;
+            --color-text-inverse: #fdfbf7;
+            --color-accent: #e8583c;
+            --color-accent-dark: #c44730;
+            --color-accent-light: #ff7a5f;
+            --color-success: #4a9d5f;
+            --color-warning: #e8a33c;
+            --color-info: #3c7e8a;
+            --color-border: #e0d9cc;
+            --color-border-dark: #c4b9a8;
+
+            /* Typography */
+            --font-display: 'Bricolage Grotesque', sans-serif;
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-code: 'JetBrains Mono', 'Courier New', monospace;
+
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 2rem;
+            --font-size-4xl: 2.5rem;
+            --font-size-5xl: 3.5rem;
+
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(42, 42, 42, 0.04), 0 1px 4px rgba(42, 42, 42, 0.03);
+            --shadow-md: 0 4px 6px rgba(42, 42, 42, 0.05), 0 2px 12px rgba(42, 42, 42, 0.04);
+            --shadow-lg: 0 10px 20px rgba(42, 42, 42, 0.06), 0 4px 16px rgba(42, 42, 42, 0.05);
+            --shadow-warm: 0 8px 16px rgba(232, 88, 60, 0.15), 0 2px 8px rgba(232, 88, 60, 0.1);
+
+            /* Border Radius */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-full: 9999px;
+
+            /* Layout */
+            --content-width: 720px;
+            --content-width-wide: 960px;
+            --max-width: 1200px;
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y proximity;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: var(--font-size-base);
+            line-height: 1.6;
+            color: var(--color-text-primary);
+            background: var(--color-bg-primary);
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--color-bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-accent);
+            border-radius: var(--radius-full);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-accent-dark);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: var(--space-4);
+        }
+
+        h1 { font-size: var(--font-size-5xl); }
+        h2 { font-size: var(--font-size-4xl); }
+        h3 { font-size: var(--font-size-3xl); }
+        h4 { font-size: var(--font-size-2xl); }
+        h5 { font-size: var(--font-size-xl); }
+        h6 { font-size: var(--font-size-lg); }
+
+        p {
+            margin-bottom: var(--space-4);
+            max-width: 65ch;
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        /* Code Styles */
+        code {
+            font-family: var(--font-code);
+            font-size: 0.9em;
+            background: var(--color-bg-tertiary);
+            padding: 0.125rem 0.375rem;
+            border-radius: var(--radius-sm);
+        }
+
+        pre {
+            background: var(--color-bg-dark);
+            color: var(--color-text-inverse);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            overflow-x: auto;
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-md);
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* Navigation Bar */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(253, 251, 247, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--space-8);
+        }
+
+        .nav-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: var(--font-size-lg);
+            color: var(--color-text-primary);
+        }
+
+        .nav-progress {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 4px;
+            background: var(--color-bg-tertiary);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--color-accent);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: var(--radius-full);
+        }
+
+        .progress-text {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        /* Module Container */
+        .module {
+            min-height: 100dvh;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: calc(60px + var(--space-12)) var(--space-8) var(--space-12);
+            scroll-snap-align: start;
+        }
+
+        .module:nth-child(even) {
+            background: var(--color-bg-secondary);
+        }
+
+        .module:nth-child(odd) {
+            background: var(--color-bg-primary);
+        }
+
+        .module-content {
+            max-width: var(--content-width);
+            width: 100%;
+        }
+
+        .module-content.wide {
+            max-width: var(--content-width-wide);
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: var(--space-12);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header {
+            margin-bottom: var(--space-8);
+        }
+
+        .module-number {
+            font-family: var(--font-display);
+            font-size: var(--font-size-sm);
+            font-weight: 800;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-2);
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+
+        .card {
+            background: white;
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-icon {
+            font-size: var(--font-size-3xl);
+            margin-bottom: var(--space-4);
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            margin-bottom: var(--space-3);
+        }
+
+        .card-description {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Callout Boxes */
+        .callout {
+            background: linear-gradient(135deg, var(--color-bg-tertiary) 0%, var(--color-bg-secondary) 100%);
+            border-left: 4px solid var(--color-accent);
+            padding: var(--space-6);
+            border-radius: var(--radius-md);
+            margin: var(--space-8) 0;
+        }
+
+        .callout-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--space-3);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .callout-content {
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Code Translation Block */
+        .code-translation {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-6);
+            margin: var(--space-8) 0;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .code-panel {
+            padding: var(--space-6);
+        }
+
+        .code-panel-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: var(--font-size-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-4);
+            color: var(--color-text-secondary);
+        }
+
+        .code-panel.left {
+            background: var(--color-bg-dark);
+        }
+
+        .code-panel.left .code-panel-title {
+            color: var(--color-text-muted);
+        }
+
+        .code-panel.left pre {
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        .code-panel.right {
+            background: var(--color-bg-primary);
+        }
+
+        .explanation-line {
+            margin-bottom: var(--space-4);
+            padding-left: var(--space-4);
+            border-left: 2px solid var(--color-accent-light);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Glossary Tooltips */
+        .term {
+            border-bottom: 1px dashed var(--color-accent);
+            cursor: pointer;
+            position: relative;
+            color: var(--color-text-primary);
+            font-weight: 500;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: white;
+            border: 1px solid var(--color-border-dark);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            max-width: 320px;
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            z-index: 2000;
+            display: none;
+            pointer-events: none;
+        }
+
+        .tooltip.visible {
+            display: block;
+        }
+
+        .tooltip-term {
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: var(--space-2);
+            font-size: var(--font-size-base);
+        }
+
+        /* Quiz Styles */
+        .quiz {
+            background: white;
+            padding: var(--space-8);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            margin: var(--space-12) 0;
+        }
+
+        .quiz-title {
+            font-family: var(--font-display);
+            font-size: var(--font-size-2xl);
+            margin-bottom: var(--space-6);
+        }
+
+        .quiz-question {
+            margin-bottom: var(--space-8);
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--space-4);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .quiz-option {
+            background: var(--color-bg-secondary);
+            padding: var(--space-4) var(--space-6);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .quiz-option:hover {
+            background: var(--color-bg-tertiary);
+            border-color: var(--color-accent-light);
+        }
+
+        .quiz-option.selected {
+            background: var(--color-accent-light);
+            color: white;
+            border-color: var(--color-accent);
+        }
+
+        .quiz-option.correct {
+            background: var(--color-success);
+            color: white;
+            border-color: var(--color-success);
+        }
+
+        .quiz-option.incorrect {
+            background: var(--color-warning);
+            color: white;
+            border-color: var(--color-warning);
+        }
+
+        .quiz-feedback {
+            margin-top: var(--space-4);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            display: none;
+        }
+
+        .quiz-feedback.visible {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: rgba(74, 157, 95, 0.1);
+            color: var(--color-success);
+        }
+
+        .quiz-feedback.incorrect {
+            background: rgba(232, 163, 60, 0.1);
+            color: var(--color-warning);
+        }
+
+        /* Animation Containers */
+        .animation-container {
+            background: white;
+            padding: var(--space-8);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            margin: var(--space-8) 0;
+            min-height: 400px;
+            position: relative;
+        }
+
+        /* Flow Diagram */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-8);
+            position: relative;
+        }
+
+        .flow-node {
+            background: var(--color-bg-secondary);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .flow-node-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--space-2);
+        }
+
+        .flow-node-desc {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .flow-arrow {
+            font-size: var(--font-size-3xl);
+            color: var(--color-accent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Group Chat Animation */
+        .group-chat {
+            max-width: 600px;
+            margin: var(--space-8) auto;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: messageSlideIn 0.3s ease forwards;
+        }
+
+        @keyframes messageSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            background: var(--color-accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .chat-bubble {
+            background: var(--color-bg-secondary);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-lg);
+            max-width: 70%;
+        }
+
+        .chat-sender {
+            font-weight: 700;
+            font-size: var(--font-size-sm);
+            margin-bottom: var(--space-1);
+        }
+
+        .chat-text {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 0 var(--space-4);
+            }
+
+            .nav-title {
+                font-size: var(--font-size-base);
+            }
+
+            .progress-bar {
+                width: 100px;
+            }
+
+            .module {
+                padding: calc(60px + var(--space-8)) var(--space-4) var(--space-8);
+            }
+
+            h1 { font-size: var(--font-size-3xl); }
+            h2 { font-size: var(--font-size-2xl); }
+            h3 { font-size: var(--font-size-xl); }
+
+            .code-translation {
+                grid-template-columns: 1fr;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-diagram {
+                flex-direction: column;
+                gap: var(--space-6);
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        /* Syntax Highlighting */
+        .syntax-keyword { color: #c792ea; }
+        .syntax-string { color: #c3e88d; }
+        .syntax-function { color: #82aaff; }
+        .syntax-comment { color: #676e95; font-style: italic; }
+        .syntax-variable { color: #f07178; }
+        .syntax-number { color: #f78c6c; }
+        .syntax-operator { color: #89ddff; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-title">Immich Course</div>
+        <div class="nav-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0%</div>
+        </div>
+    </nav>
+
+    <!-- Module 1: What Immich Does -->
+    <section class="module" id="module-1">
+        <div class="module-content">
+            <div class="section">
+                <div class="section-header">
+                    <div class="module-number">Module 1</div>
+                    <h1>What Immich Does (And What Happens When You Upload a Photo)</h1>
+                </div>
+
+                <p>Imagine you have thousands of photos on your phone — family memories, vacation snapshots, random screenshots. They're all stuck on your device, taking up space, and you're worried about losing them if something happens to your phone.</p>
+
+                <p><strong>Immich is your personal photo manager.</strong> It's like having your own private Google Photos or iCloud Photos, but running on your own computer or server. You control where your photos live, who can see them, and how they're organized.</p>
+
+                <p>Here's what makes Immich special:</p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">📱</div>
+                        <div class="card-title">Auto Backup</div>
+                        <div class="card-description">Open the app, and photos automatically sync from your phone to your server. No button clicking needed.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🔍</div>
+                        <div class="card-title">Smart Search</div>
+                        <div class="card-description">Find photos by searching "beach" or "dog" — even if you never tagged them. The AI reads what's in the picture.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">👤</div>
+                        <div class="card-title">Face Recognition</div>
+                        <div class="card-description">The app automatically groups photos by the people in them. Search for a person, see all their photos.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🗺️</div>
+                        <div class="card-title">Map View</div>
+                        <div class="card-description">See where you took each photo on a map. Relive your travels visually.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🔐</div>
+                        <div class="card-title">Full Privacy</div>
+                        <div class="card-description">Everything runs on hardware you control. No company analyzing your photos in the cloud.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🌐</div>
+                        <div class="card-title">Multi-Platform</div>
+                        <div class="card-description">Mobile app for iOS and Android, plus a web interface you can access from any browser.</div>
+                    </div>
+                </div>
+
+                <h2>Let's Trace What Happens When You Upload a Photo</h2>
+
+                <p>The best way to understand how Immich works is to follow a photo's journey through the system. You open the mobile app, select a photo of your dog, and tap "Upload." What happens under the hood?</p>
+
+                <div class="animation-container">
+                    <div class="flow-diagram">
+                        <div class="flow-node">
+                            <div class="flow-node-title">📱 Mobile App</div>
+                            <div class="flow-node-desc">You tap upload</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-node">
+                            <div class="flow-node-title">🌐 API Server</div>
+                            <div class="flow-node-desc">Receives the photo</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-node">
+                            <div class="flow-node-title">💾 Storage</div>
+                            <div class="flow-node-desc">Saves to disk</div>
+                        </div>
+                    </div>
+
+                    <div class="flow-diagram" style="margin-top: var(--space-8);">
+                        <div class="flow-node">
+                            <div class="flow-node-title">🧠 ML Worker</div>
+                            <div class="flow-node-desc">Analyzes content</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-node">
+                            <div class="flow-node-title">🗄️ Database</div>
+                            <div class="flow-node-desc">Stores metadata</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-node">
+                            <div class="flow-node-title">✅ Done</div>
+                            <div class="flow-node-desc">Photo searchable</div>
+                        </div>
+                    </div>
+                </div>
+
+                <p>Let's break down each step to understand what's really happening:</p>
+            </div>
+
+            <div class="section">
+                <h3>Step 1: The Mobile App Sends Your Photo</h3>
+
+                <p>When you tap upload, the mobile app doesn't just throw the photo file at the server. It carefully packages the photo with important information:</p>
+
+                <ul style="margin-left: var(--space-6); margin-bottom: var(--space-6);">
+                    <li style="margin-bottom: var(--space-2);">The actual image file (the pixels that make up your dog photo)</li>
+                    <li style="margin-bottom: var(--space-2);">Metadata like when the photo was taken, where it was taken (GPS coordinates), and what device captured it</li>
+                    <li style="margin-bottom: var(--space-2);">A unique ID for your device (so Immich knows this photo came from *your* phone)</li>
+                    <li style="margin-bottom: var(--space-2);">Authentication credentials (proves you have permission to upload)</li>
+                </ul>
+
+                <div class="callout">
+                    <div class="callout-title">💡 Why This Matters for You</div>
+                    <div class="callout-content">
+                        <p>When you're building with AI tools, understanding this step helps you debug upload failures. If a photo doesn't appear, you can ask: "Did the mobile app successfully package the data? Did authentication work? Did the network request make it to the server?" Each piece of this flow is a potential failure point you need to check.</p>
+                    </div>
+                </div>
+
+                <p>The app sends this package to the server using an <span class="term" data-term="API">API</span> call. Think of an API as a waiter in a restaurant — you tell the waiter what you want (upload this photo), and the waiter takes your request to the kitchen (the server).</p>
+            </div>
+
+            <div class="section">
+                <h3>Step 2: The API Server Receives and Validates</h3>
+
+                <p>Your photo arrives at Immich's <span class="term" data-term="backend">backend</span> server, specifically at an <span class="term" data-term="endpoint">endpoint</span> designed to handle uploads. The server acts like a bouncer at a club — it checks your credentials before letting the photo in:</p>
+
+                <div class="code-translation">
+                    <div class="code-panel left">
+                        <div class="code-panel-title">The Code</div>
+                        <pre><code><span class="syntax-keyword">@Post</span>()
+<span class="syntax-keyword">@Authenticated</span>({ permission: Permission.AssetCreate })
+<span class="syntax-function">uploadAsset</span>(<span class="syntax-keyword">@Auth</span>() auth: AuthDto, <span class="syntax-keyword">@Body</span>() dto: AssetUploadDto) {
+  <span class="syntax-keyword">return</span> <span class="syntax-keyword">this</span>.service.<span class="syntax-function">uploadFile</span>(auth, dto);
+}</code></pre>
+                    </div>
+                    <div class="code-panel right">
+                        <div class="code-panel-title">What It Means</div>
+                        <div class="explanation-line">This is a POST endpoint — it receives data from the mobile app.</div>
+                        <div class="explanation-line">The @Authenticated decorator checks if you're logged in and have permission to create assets (upload photos).</div>
+                        <div class="explanation-line">If you pass the check, it calls the service layer to actually handle the upload.</div>
+                        <div class="explanation-line">The service layer is where the real work happens — storing the file, extracting metadata, etc.</div>
+                    </div>
+                </div>
+
+                <p>If authentication fails (maybe your login token expired), the server rejects the upload immediately. You'd see an error in the app: "Session expired, please log in again."</p>
+
+                <p>If authentication succeeds, the server moves on to the next step: saving your photo.</p>
+            </div>
+
+            <div class="section">
+                <h3>Step 3: Saving the Photo to Storage</h3>
+
+                <p>The server needs to store your photo file somewhere permanent. It doesn't keep photos in memory (that would be lost if the server restarts) — it writes them to disk.</p>
+
+                <p>Immich uses a <span class="term" data-term="storage template">storage template</span> system. Think of it like a filing cabinet with a specific folder structure. Your photo might be saved to a path like:</p>
+
+                <pre><code>/upload/library/your-user-id/2026/03/your-dog-photo.jpg</code></pre>
+
+                <p>This structure makes it easy to find photos later. Each user has their own folder, organized by year and month. The server also generates a <span class="term" data-term="thumbnail">thumbnail</span> (a smaller version of the photo for fast loading in the gallery view).</p>
+
+                <div class="callout">
+                    <div class="callout-title">💡 Why This Matters for You</div>
+                    <div class="callout-content">
+                        <p>When you're using AI to build similar apps, the storage strategy is a key architectural decision. Do you store files locally, or use cloud storage like S3? How do you organize files so they're easy to retrieve? Understanding Immich's approach gives you a pattern to copy or improve on.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Step 4: Extracting Metadata</h3>
+
+                <p>Photos contain hidden data beyond just pixels. This is called <span class="term" data-term="EXIF">EXIF</span> data, and it includes things like:</p>
+
+                <ul style="margin-left: var(--space-6); margin-bottom: var(--space-6);">
+                    <li style="margin-bottom: var(--space-2);">Camera model (iPhone 15, Canon EOS, etc.)</li>
+                    <li style="margin-bottom: var(--space-2);">GPS coordinates (where the photo was taken)</li>
+                    <li style="margin-bottom: var(--space-2);">Date and time the photo was captured</li>
+                    <li style="margin-bottom: var(--space-2);">Camera settings (shutter speed, ISO, aperture)</li>
+                </ul>
+
+                <p>Immich uses a tool called <span class="term" data-term="ExifTool">ExifTool</span> to read this data. It's like a photo detective that can pull out all these hidden details. The server extracts the EXIF data and stores it in the database so you can later search photos by location, date, or camera.</p>
+            </div>
+
+            <div class="section">
+                <h3>Step 5: The Machine Learning Worker Takes Over</h3>
+
+                <p>Here's where things get interesting. Your photo isn't done processing yet. It gets added to a <span class="term" data-term="job queue">job queue</span> for the machine learning worker to analyze.</p>
+
+                <p>Think of a job queue like a to-do list. The API server says "I've saved this photo, but it still needs ML analysis" and adds it to the list. The ML worker picks up jobs from this list and processes them one by one.</p>
+
+                <div class="animation-container">
+                    <div class="group-chat" id="mlChatAnimation">
+                        <!-- Chat messages will be dynamically inserted here -->
+                    </div>
+                </div>
+
+                <p>The ML worker does three main things:</p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">🔍</div>
+                        <div class="card-title">Object Detection</div>
+                        <div class="card-description">Uses a CLIP model to identify what's in the photo (dog, beach, car, etc.). This powers search.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">👤</div>
+                        <div class="card-title">Face Recognition</div>
+                        <div class="card-description">Detects faces and creates embeddings (mathematical representations) to group photos by person.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🏷️</div>
+                        <div class="card-title">Smart Tagging</div>
+                        <div class="card-description">Automatically tags the photo with keywords based on what the AI sees.</div>
+                    </div>
+                </div>
+
+                <p>All of this analysis data gets stored in the database. Now when you search "dog," Immich can find your photo because the ML worker tagged it with "dog."</p>
+            </div>
+
+            <div class="section">
+                <h3>Step 6: Saved in the Database</h3>
+
+                <p>The final step is saving everything to the <span class="term" data-term="database">database</span>. Think of the database like a massive spreadsheet that keeps track of all your photos and their metadata.</p>
+
+                <p>For your dog photo, the database stores:</p>
+
+                <ul style="margin-left: var(--space-6); margin-bottom: var(--space-6);">
+                    <li style="margin-bottom: var(--space-2);">The file path where the photo is stored on disk</li>
+                    <li style="margin-bottom: var(--space-2);">When it was uploaded and when it was taken</li>
+                    <li style="margin-bottom: var(--space-2);">GPS coordinates (for map view)</li>
+                    <li style="margin-bottom: var(--space-2);">Tags generated by the ML worker ("dog," "outdoor," "grass," etc.)</li>
+                    <li style="margin-bottom: var(--space-2);">Face embeddings (if people are detected)</li>
+                    <li style="margin-bottom: var(--space-2);">Which user owns this photo</li>
+                </ul>
+
+                <p>Now your photo is fully processed. You can search for it, view it on the map, or find it by browsing your timeline. All in a matter of seconds from when you tapped upload.</p>
+            </div>
+
+            <div class="section">
+                <h2>Quiz: Test Your Understanding</h2>
+
+                <div class="quiz">
+                    <div class="quiz-question">
+                        <div class="question-text">1. You want to add a "favorite" button to photos. Based on what you learned about Immich's architecture, where would you need to make changes?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="1" data-answer="A">
+                                A) Only the mobile app — it's a UI feature
+                            </div>
+                            <div class="quiz-option" data-question="1" data-answer="B">
+                                B) Mobile app + web interface + API server + database
+                            </div>
+                            <div class="quiz-option" data-question="1" data-answer="C">
+                                C) Just the database — favorites are metadata
+                            </div>
+                            <div class="quiz-option" data-question="1" data-answer="D">
+                                D) The ML worker needs to detect favorites
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="1"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">2. A user reports that photos upload successfully but don't appear in search results. Based on the upload flow, where would you look first?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="2" data-answer="A">
+                                A) Check if the mobile app is outdated
+                            </div>
+                            <div class="quiz-option" data-question="2" data-answer="B">
+                                B) Check if the ML worker is running and processing the job queue
+                            </div>
+                            <div class="quiz-option" data-question="2" data-answer="C">
+                                C) Check if storage is full
+                            </div>
+                            <div class="quiz-option" data-question="2" data-answer="D">
+                                D) Check if the user has permission to search
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="2"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">3. What's the main reason Immich uses a job queue for ML processing instead of doing it immediately during upload?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="3" data-answer="A">
+                                A) ML processing is slow — queuing it keeps uploads fast
+                            </div>
+                            <div class="quiz-option" data-question="3" data-answer="B">
+                                B) It's a security feature to scan photos
+                            </div>
+                            <div class="quiz-option" data-question="3" data-answer="C">
+                                C) Users can cancel ML jobs if needed
+                            </div>
+                            <div class="quiz-option" data-question="3" data-answer="D">
+                                D) The mobile app can't run ML models
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 2: The Cast of Characters -->
+    <section class="module" id="module-2">
+        <div class="module-content wide">
+            <div class="section">
+                <div class="section-header">
+                    <div class="module-number">Module 2</div>
+                    <h1>The Cast of Characters: Who Does What in Immich</h1>
+                </div>
+
+                <p>Immich isn't one big program — it's a team of specialized components working together. Each component has a specific job, like actors in a play. Understanding who does what helps you know where to look when building new features or debugging problems.</p>
+
+                <p>Let's meet the main characters:</p>
+            </div>
+
+            <div class="section">
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">📱</div>
+                        <div class="card-title">Mobile App (Flutter)</div>
+                        <div class="card-description">The iOS and Android apps users interact with. Built with Flutter (a cross-platform framework). Handles photo upload, browsing, and syncing.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🌐</div>
+                        <div class="card-title">Web App (Svelte)</div>
+                        <div class="card-description">The browser interface at demo.immich.app. Built with Svelte (a modern web framework). Mirrors mobile app features but runs in any browser.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🔧</div>
+                        <div class="card-title">API Server (NestJS)</div>
+                        <div class="card-description">The backend brain. Built with NestJS (a Node.js framework). Handles authentication, file uploads, and coordinates all other services.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🧠</div>
+                        <div class="card-title">ML Worker (Python)</div>
+                        <div class="card-description">The machine learning engine. Built with Python. Runs face recognition, object detection, and smart tagging using AI models.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🗄️</div>
+                        <div class="card-title">PostgreSQL Database</div>
+                        <div class="card-description">The library catalog. Stores all metadata, user accounts, tags, and search indexes. Not where photos are stored — that's in file storage.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">⚡</div>
+                        <div class="card-title">Redis Cache</div>
+                        <div class="card-description">The speedster. Stores temporary data like job queues and session tokens for ultra-fast access. Basically short-term memory.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>How They Work Together</h2>
+
+                <p>Imagine you're browsing photos on the web app. Behind the scenes, here's who's doing what:</p>
+
+                <div class="animation-container">
+                    <div class="group-chat" id="componentsChat">
+                        <!-- Will be populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>The API Server: The Traffic Controller</h2>
+
+                <p>The API server is the most important component. It's like an air traffic controller — coordinating everything and making sure requests go to the right place.</p>
+
+                <p>Here's what the API server is responsible for:</p>
+
+                <div class="code-translation">
+                    <div class="code-panel left">
+                        <div class="code-panel-title">The Code (app.module.ts)</div>
+                        <pre><code><span class="syntax-keyword">@Module</span>({
+  controllers: [
+    <span class="syntax-variable">AssetController</span>,
+    <span class="syntax-variable">AuthController</span>,
+    <span class="syntax-variable">AlbumController</span>,
+    <span class="syntax-variable">PersonController</span>,
+    <span class="syntax-variable">SearchController</span>,
+    <span class="syntax-comment">// ...many more</span>
+  ],
+  providers: [
+    <span class="syntax-variable">AssetService</span>,
+    <span class="syntax-variable">AuthService</span>,
+    <span class="syntax-variable">StorageService</span>,
+    <span class="syntax-comment">// ...corresponding services</span>
+  ]
+})</code></pre>
+                    </div>
+                    <div class="code-panel right">
+                        <div class="code-panel-title">What It Means</div>
+                        <div class="explanation-line">Controllers are like receptionists — they receive requests from mobile/web and decide what to do.</div>
+                        <div class="explanation-line">Each controller handles a specific domain: assets (photos), auth (login), albums, people, search, etc.</div>
+                        <div class="explanation-line">Services contain the actual business logic — "how do I save a photo?" or "how do I authenticate this user?"</div>
+                        <div class="explanation-line">This separation (controllers handle requests, services do the work) is a common pattern in backend development.</div>
+                    </div>
+                </div>
+
+                <div class="callout">
+                    <div class="callout-title">💡 Why This Matters for You</div>
+                    <div class="callout-content">
+                        <p>When you're asking an AI to "add a feature to Immich," you need to know which component to modify. Want to add a new search filter? You'd update the SearchController and SearchService. Want to change how photos are stored? That's the StorageService. Knowing the cast helps you give AI precise instructions like "modify the AssetService to support video transcoding."</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>The ML Worker: The Brain</h2>
+
+                <p>The ML worker runs separately from the API server. Why? Because machine learning is computationally expensive. If the API server tried to run ML models while also handling uploads and authentication, everything would slow down.</p>
+
+                <p>Instead, the ML worker is a separate <span class="term" data-term="process">process</span> that picks up jobs from the queue and processes them one at a time. It's like having a dedicated photo analyst who works in the background while the rest of the team handles day-to-day operations.</p>
+
+                <p>The ML worker uses specialized AI models:</p>
+
+                <ul style="margin-left: var(--space-6); margin-bottom: var(--space-6);">
+                    <li style="margin-bottom: var(--space-2);"><strong>CLIP</strong> — a model that understands what objects are in photos (can you spot a dog vs a cat?)</li>
+                    <li style="margin-bottom: var(--space-2);"><strong>InsightFace</strong> — detects and recognizes faces, creating mathematical "fingerprints" for each person</li>
+                    <li style="margin-bottom: var(--space-2);"><strong>PaddleOCR</strong> — reads text from photos (like signs, documents, or screenshots)</li>
+                </ul>
+
+                <p>These models run using <span class="term" data-term="GPU">GPU</span> acceleration if available (much faster than CPU), but can fall back to CPU if needed.</p>
+            </div>
+
+            <div class="section">
+                <h2>Why Separate Web and Mobile Apps?</h2>
+
+                <p>You might wonder: why have both a web app and a mobile app? Why not just one?</p>
+
+                <p>The answer is about reaching users where they are:</p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">📱</div>
+                        <div class="card-title">Mobile App</div>
+                        <div class="card-description"><strong>Best for:</strong> Automatic backup, browsing on the go, and taking new photos. Needs to run in the background to sync photos even when you're not actively using it.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🌐</div>
+                        <div class="card-title">Web App</div>
+                        <div class="card-description"><strong>Best for:</strong> Admin tasks, bulk photo management, and accessing from any device with a browser. No installation needed.</div>
+                    </div>
+                </div>
+
+                <p>They both talk to the same API server, so your photos and settings stay in sync. Add a photo on mobile, it appears on web instantly (and vice versa).</p>
+            </div>
+
+            <div class="section">
+                <h2>Quiz: Who Does What?</h2>
+
+                <div class="quiz">
+                    <div class="quiz-question">
+                        <div class="question-text">1. A user wants to batch-rename 100 photos at once. Which component would handle this request?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="4" data-answer="A">
+                                A) The ML worker — it analyzes photos
+                            </div>
+                            <div class="quiz-option" data-question="4" data-answer="B">
+                                B) The mobile app — users do it from their phone
+                            </div>
+                            <div class="quiz-option" data-question="4" data-answer="C">
+                                C) The API server (specifically the AssetService)
+                            </div>
+                            <div class="quiz-option" data-question="4" data-answer="D">
+                                D) PostgreSQL — it stores the names
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="4"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">2. You notice face detection is very slow. Which component would you optimize?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="5" data-answer="A">
+                                A) The API server — it handles all requests
+                            </div>
+                            <div class="quiz-option" data-question="5" data-answer="B">
+                                B) The ML worker — it runs face recognition
+                            </div>
+                            <div class="quiz-option" data-question="5" data-answer="C">
+                                C) Redis cache — it speeds things up
+                            </div>
+                            <div class="quiz-option" data-question="5" data-answer="D">
+                                D) The web app — users see the results there
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="5"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">3. What's the main benefit of running the ML worker as a separate process from the API server?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="6" data-answer="A">
+                                A) Security — keeps AI models isolated
+                            </div>
+                            <div class="quiz-option" data-question="6" data-answer="B">
+                                B) Performance — ML doesn't slow down uploads/authentication
+                            </div>
+                            <div class="quiz-option" data-question="6" data-answer="C">
+                                C) Cost — Python is cheaper than Node.js
+                            </div>
+                            <div class="quiz-option" data-question="6" data-answer="D">
+                                D) It's required by the ML libraries
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="6"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 3: How Data Flows -->
+    <section class="module" id="module-3">
+        <div class="module-content">
+            <div class="section">
+                <div class="section-header">
+                    <div class="module-number">Module 3</div>
+                    <h1>How Data Flows: From Your Phone to the Database</h1>
+                </div>
+
+                <p>Now that you know the cast of characters, let's understand how they talk to each other. In Immich, data is constantly flowing between components — from your phone to the server, from the server to the database, from the ML worker back to the web app.</p>
+
+                <p>Understanding these data flows is crucial when you're debugging issues or building new features. Let's trace a few common scenarios.</p>
+            </div>
+
+            <div class="section">
+                <h2>Authentication: The Bouncer System</h2>
+
+                <p>Before you can upload photos or view anything, you need to prove you're allowed to access the system. This is called <span class="term" data-term="authentication">authentication</span>.</p>
+
+                <p>Here's the authentication flow when you log in to the mobile app:</p>
+
+                <div class="animation-container">
+                    <div class="flow-diagram" style="flex-direction: column; gap: var(--space-6);">
+                        <div class="flow-node">
+                            <div class="flow-node-title">1. You Enter Credentials</div>
+                            <div class="flow-node-desc">Mobile app → API server with email/password</div>
+                        </div>
+                        <div class="flow-arrow" style="transform: rotate(90deg);">→</div>
+                        <div class="flow-node">
+                            <div class="flow-node-title">2. Server Checks Database</div>
+                            <div class="flow-node-desc">Does this user exist? Is the password correct?</div>
+                        </div>
+                        <div class="flow-arrow" style="transform: rotate(90deg);">→</div>
+                        <div class="flow-node">
+                            <div class="flow-node-title">3. Server Generates Token</div>
+                            <div class="flow-node-desc">Creates a JWT — like a temporary hall pass</div>
+                        </div>
+                        <div class="flow-arrow" style="transform: rotate(90deg);">→</div>
+                        <div class="flow-node">
+                            <div class="flow-node-title">4. App Stores Token</div>
+                            <div class="flow-node-desc">Saved locally, sent with every future request</div>
+                        </div>
+                    </div>
+                </div>
+
+                <p>A <span class="term" data-term="JWT">JWT</span> (JSON Web Token) is like a movie ticket — it proves you paid to get in, and the theater (server) can verify it's legitimate. Every time you make a request (upload a photo, view an album), your app sends this token to prove you're authorized.</p>
+
+                <div class="callout">
+                    <div class="callout-title">💡 Why This Matters for You</div>
+                    <div class="callout-content">
+                        <p>When users report "I keep getting logged out" or "my uploads fail randomly," the issue is often token expiration. Understanding the auth flow helps you debug: Is the token expiring too quickly? Is the app not refreshing it? Is the server rejecting valid tokens? Each step is a potential failure point.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Search: Finding Needles in Digital Haystacks</h2>
+
+                <p>When you type "beach" into the search bar, how does Immich find photos of beaches — even if you never tagged them? Let's trace the search flow:</p>
+
+                <div class="code-translation">
+                    <div class="code-panel left">
+                        <div class="code-panel-title">Search Controller Code</div>
+                        <pre><code><span class="syntax-keyword">@Get</span>(<span class="syntax-string">'search'</span>)
+<span class="syntax-keyword">@Authenticated</span>()
+<span class="syntax-function">search</span>(<span class="syntax-keyword">@Query</span>() query: SearchDto) {
+  <span class="syntax-keyword">return</span> <span class="syntax-keyword">this</span>.searchService
+    .<span class="syntax-function">searchAssets</span>(query);
+}</code></pre>
+                    </div>
+                    <div class="code-panel right">
+                        <div class="code-panel-title">What It Means</div>
+                        <div class="explanation-line">When you search, the web/mobile app sends a GET request to the search endpoint.</div>
+                        <div class="explanation-line">The query contains your search term ("beach") plus optional filters (date range, person, etc.).</div>
+                        <div class="explanation-line">The SearchService handles the actual searching logic.</div>
+                        <div class="explanation-line">Results come back as a list of matching photos with their metadata.</div>
+                    </div>
+                </div>
+
+                <p>Behind the scenes, the SearchService queries the database for photos that match your term. But how does the database know which photos have beaches? That's thanks to the ML worker from earlier — it analyzed every photo and stored tags like "beach," "ocean," "sand" in the database.</p>
+
+                <p>The search uses something called <span class="term" data-term="vector search">vector search</span>. Instead of just matching exact words, it understands concepts. Searching "beach" might also find photos tagged "ocean" or "coast" because they're conceptually similar.</p>
+            </div>
+
+            <div class="section">
+                <h2>Sharing: Letting Others See Your Photos</h2>
+
+                <p>When you share an album with a friend, what actually happens? Let's trace the sharing flow:</p>
+
+                <div class="animation-container">
+                    <div class="group-chat" id="sharingChat"></div>
+                </div>
+
+                <p>Shared links work by creating a temporary public URL that doesn't require login. The link contains a unique <span class="term" data-term="token">token</span> that grants access to specific photos. When someone clicks the link, the server checks if that token is valid and, if so, serves the photos.</p>
+
+                <div class="callout">
+                    <div class="callout-title">💡 Why This Matters for You</div>
+                    <div class="callout-content">
+                        <p>Understanding sharing flows is critical for security. If you're building a similar feature, you need to think: How do you grant access without requiring login? How do you revoke access later? What prevents someone from guessing valid share links? Immich's approach (unique tokens, optional passwords, expiration dates) gives you a pattern to follow.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Quiz: Trace the Flow</h2>
+
+                <div class="quiz">
+                    <div class="quiz-question">
+                        <div class="question-text">1. A user reports photos aren't appearing in search results even days after upload. The upload works, face recognition works, but search returns nothing. Where's the likely issue?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="7" data-answer="A">
+                                A) The search endpoint is broken
+                            </div>
+                            <div class="quiz-option" data-question="7" data-answer="B">
+                                B) The ML worker's CLIP model (object detection) isn't running
+                            </div>
+                            <div class="quiz-option" data-question="7" data-answer="C">
+                                C) The database is full
+                            </div>
+                            <div class="quiz-option" data-question="7" data-answer="D">
+                                D) The authentication token expired
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="7"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">2. What's the main security mechanism that prevents unauthorized access to the API?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="8" data-answer="A">
+                                A) Password encryption in the database
+                            </div>
+                            <div class="quiz-option" data-question="8" data-answer="B">
+                                B) JWT tokens verified on every request
+                            </div>
+                            <div class="quiz-option" data-question="8" data-answer="C">
+                                C) Rate limiting to prevent brute force
+                            </div>
+                            <div class="quiz-option" data-question="8" data-answer="D">
+                                D) HTTPS encryption
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="8"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 4: The Machine Learning Magic -->
+    <section class="module" id="module-4">
+        <div class="module-content">
+            <div class="section">
+                <div class="section-header">
+                    <div class="module-number">Module 4</div>
+                    <h1>The Machine Learning Magic: How Photos Become Searchable</h1>
+                </div>
+
+                <p>The coolest part of Immich is its AI-powered features: face recognition, object detection, and smart search. But how does a computer "know" there's a dog in your photo? Let's demystify the machine learning worker.</p>
+            </div>
+
+            <div class="section">
+                <h2>The Three ML Models</h2>
+
+                <p>Immich uses three specialized AI models, each with a different superpower:</p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">🔍</div>
+                        <div class="card-title">CLIP (Object Detection)</div>
+                        <div class="card-description">Understands what objects are in a photo. Trained on millions of images to recognize dogs, cars, beaches, mountains, etc. Powers the search feature.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">👤</div>
+                        <div class="card-title">InsightFace (Face Recognition)</div>
+                        <div class="card-description">Detects faces and creates unique "fingerprints" for each person. Groups photos by who's in them. Can recognize the same person across different photos.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">📝</div>
+                        <div class="card-title">PaddleOCR (Text Reading)</div>
+                        <div class="card-description">Reads text from images — street signs, documents, screenshots, memes. Makes text content searchable.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>How CLIP Understands Images</h2>
+
+                <p>CLIP is the most magical part. It doesn't just match keywords — it actually "understands" what's in a photo conceptually. Here's how it works:</p>
+
+                <p>Imagine showing a photo to a very smart friend and asking "What's in this?" They might say "a golden retriever playing in a park on a sunny day." CLIP does something similar, but mathematically.</p>
+
+                <div class="callout">
+                    <div class="callout-title">🧮 The Math Behind the Magic</div>
+                    <div class="callout-content">
+                        <p>CLIP converts your photo into a list of numbers called an <span class="term" data-term="embedding">embedding</span> — think of it like a photo's fingerprint. Photos of dogs have similar fingerprints to other dog photos. When you search "dog," CLIP compares your search term's fingerprint to all photo fingerprints and finds the closest matches. This is why it works even if you never manually tagged anything.</p>
+                    </div>
+                </div>
+
+                <p>The embedding is stored in the database alongside each photo. When you search, the system compares your search query's embedding to all stored embeddings and returns the closest matches. It's like asking "which photos have fingerprints similar to the fingerprint of the word 'beach'?"</p>
+            </div>
+
+            <div class="section">
+                <h2>Face Recognition: The Two-Step Dance</h2>
+
+                <p>Face recognition is more complex than object detection because it needs to answer two questions:</p>
+
+                <ol style="margin-left: var(--space-6); margin-bottom: var(--space-6);">
+                    <li style="margin-bottom: var(--space-3);"><strong>Are there faces in this photo?</strong> (Face Detection)</li>
+                    <li style="margin-bottom: var(--space-3);"><strong>Whose face is this?</strong> (Face Recognition)</li>
+                </ol>
+
+                <div class="animation-container">
+                    <div class="flow-diagram" style="flex-direction: column; gap: var(--space-6);">
+                        <div class="flow-node">
+                            <div class="flow-node-title">Step 1: Face Detection</div>
+                            <div class="flow-node-desc">Find all faces in the photo (bounding boxes)</div>
+                        </div>
+                        <div class="flow-arrow" style="transform: rotate(90deg);">→</div>
+                        <div class="flow-node">
+                            <div class="flow-node-title">Step 2: Face Embeddings</div>
+                            <div class="flow-node-desc">Create a unique "fingerprint" for each face</div>
+                        </div>
+                        <div class="flow-arrow" style="transform: rotate(90deg);">→</div>
+                        <div class="flow-node">
+                            <div class="flow-node-title">Step 3: Clustering</div>
+                            <div class="flow-node-desc">Group similar faces together (same person)</div>
+                        </div>
+                        <div class="flow-arrow" style="transform: rotate(90deg);">→</div>
+                        <div class="flow-node">
+                            <div class="flow-node-title">Step 4: User Labels</div>
+                            <div class="flow-node-desc">You label one cluster "Mom" — all photos update</div>
+                        </div>
+                    </div>
+                </div>
+
+                <p>The cool part is step 3: clustering. The system automatically groups faces that look similar, even before you label anyone. It's saying "I found 47 photos with this face, 23 with this other face, etc." You just need to label one photo in each cluster, and the whole cluster gets labeled.</p>
+            </div>
+
+            <div class="section">
+                <h2>The Performance Trade-off</h2>
+
+                <p>Running AI models is computationally expensive. Processing one photo might take 2-5 seconds on a CPU, but only 0.2 seconds on a <span class="term" data-term="GPU">GPU</span>. This is why Immich supports GPU acceleration.</p>
+
+                <p>Here's the trade-off you face when self-hosting Immich:</p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">🐢</div>
+                        <div class="card-title">CPU Only</div>
+                        <div class="card-description"><strong>Slower:</strong> 2-5 seconds per photo. Fine for small libraries (hundreds of photos). No special hardware needed.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🚀</div>
+                        <div class="card-title">GPU Accelerated</div>
+                        <div class="card-description"><strong>Much Faster:</strong> 0.2-0.5 seconds per photo. Essential for large libraries (thousands of photos). Requires NVIDIA GPU or compatible hardware.</div>
+                    </div>
+                </div>
+
+                <div class="callout">
+                    <div class="callout-title">💡 Why This Matters for You</div>
+                    <div class="callout-content">
+                        <p>When building AI-powered apps with AI coding tools, hardware is a key decision. Do you run ML on the server (like Immich) or in the browser (using TensorFlow.js)? Server-side gives you access to GPUs but requires backend infrastructure. Client-side (browser) is easier to deploy but limited by device performance. Understanding Immich's choice helps you make informed decisions for your own projects.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Quiz: Understanding ML</h2>
+
+                <div class="quiz">
+                    <div class="quiz-question">
+                        <div class="question-text">1. You search for "sunset" but get photos of sunrises too. Why does this happen?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="9" data-answer="A">
+                                A) The ML model is broken
+                            </div>
+                            <div class="quiz-option" data-question="9" data-answer="B">
+                                B) CLIP uses embeddings — sunset and sunrise are conceptually similar
+                            </div>
+                            <div class="quiz-option" data-question="9" data-answer="C">
+                                C) The database has incorrect tags
+                            </div>
+                            <div class="quiz-option" data-question="9" data-answer="D">
+                                D) It's a bug in the search algorithm
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="9"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">2. Your photo library has 10,000 photos. ML processing is taking days. What's the most effective optimization?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="10" data-answer="A">
+                                A) Add more RAM to the server
+                            </div>
+                            <div class="quiz-option" data-question="10" data-answer="B">
+                                B) Enable GPU acceleration
+                            </div>
+                            <div class="quiz-option" data-question="10" data-answer="C">
+                                C) Use a faster CPU
+                            </div>
+                            <div class="quiz-option" data-question="10" data-answer="D">
+                                D) Reduce the photo resolution
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="10"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 5: Storage and Database Architecture -->
+    <section class="module" id="module-5">
+        <div class="module-content">
+            <div class="section">
+                <div class="section-header">
+                    <div class="module-number">Module 5</div>
+                    <h1>Storage and Database: Where Everything Lives</h1>
+                </div>
+
+                <p>Immich stores two types of data: the actual photo files (pixels) and metadata about those photos (who, what, when, where). Understanding the difference is key to debugging storage issues and making smart architectural decisions.</p>
+            </div>
+
+            <div class="section">
+                <h2>Files vs. Metadata: A Critical Distinction</h2>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">🖼️</div>
+                        <div class="card-title">File Storage (Disk)</div>
+                        <div class="card-description">The actual photo and video files. Stored as files on disk (or S3-compatible object storage). Large but simple — just files in folders.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🗄️</div>
+                        <div class="card-title">Metadata (PostgreSQL)</div>
+                        <div class="card-description">Information *about* the files: file paths, upload dates, GPS coords, tags, embeddings, user IDs. Small but complex — supports fast queries and relationships.</div>
+                    </div>
+                </div>
+
+                <p>Think of it like a library: the books are file storage (bulky, stored on shelves), and the card catalog is the database (compact, lets you find books instantly).</p>
+
+                <div class="callout">
+                    <div class="callout-title">🤔 Why Not Store Photos in the Database?</div>
+                    <div class="callout-content">
+                        <p>Databases are optimized for structured data and fast queries, not large binary files. Storing a 5MB photo in PostgreSQL would slow down queries and waste database resources. Files go on disk; metadata goes in the database. This separation is a fundamental pattern in web development.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>The Database Schema: What Gets Stored</h2>
+
+                <p>The PostgreSQL database stores dozens of <span class="term" data-term="tables">tables</span>, each tracking a different aspect of your photo library. Here are the most important ones:</p>
+
+                <div class="code-translation">
+                    <div class="code-panel left">
+                        <div class="code-panel-title">Assets Table (Simplified)</div>
+                        <pre><code><span class="syntax-keyword">table</span> assets {
+  id: <span class="syntax-keyword">uuid</span>
+  userId: <span class="syntax-keyword">uuid</span>
+  originalPath: <span class="syntax-keyword">string</span>
+  createdAt: <span class="syntax-keyword">timestamp</span>
+  latitude: <span class="syntax-keyword">number</span>
+  longitude: <span class="syntax-keyword">number</span>
+  deviceId: <span class="syntax-keyword">string</span>
+  isFavorite: <span class="syntax-keyword">boolean</span>
+}</code></pre>
+                    </div>
+                    <div class="code-panel right">
+                        <div class="code-panel-title">What It Means</div>
+                        <div class="explanation-line">Each photo is an "asset" with a unique ID.</div>
+                        <div class="explanation-line">userId links the photo to its owner.</div>
+                        <div class="explanation-line">originalPath tells the server where the file is on disk.</div>
+                        <div class="explanation-line">GPS coordinates enable map view.</div>
+                        <div class="explanation-line">Favorite status, device info, and upload time are all here.</div>
+                    </div>
+                </div>
+
+                <p>Other important tables include:</p>
+
+                <ul style="margin-left: var(--space-6); margin-bottom: var(--space-6);">
+                    <li style="margin-bottom: var(--space-2);"><strong>smart_search</strong> — stores CLIP embeddings for each photo (the "fingerprints" for search)</li>
+                    <li style="margin-bottom: var(--space-2);"><strong>person</strong> — tracks detected people and their names</li>
+                    <li style="margin-bottom: var(--space-2);"><strong>face</strong> — stores face embeddings and links them to photos and people</li>
+                    <li style="margin-bottom: var(--space-2);"><strong>album</strong> — groups photos into collections</li>
+                    <li style="margin-bottom: var(--space-2);"><strong>shared_link</strong> — tracks public share links and their permissions</li>
+                </ul>
+
+                <p>These tables are connected through <span class="term" data-term="foreign keys">foreign keys</span> — like arrows pointing from one table to another. For example, the faces table points to both the assets table (which photo is this?) and the person table (whose face is this?).</p>
+            </div>
+
+            <div class="section">
+                <h2>Storage Templates: Organizing Files on Disk</h2>
+
+                <p>Immich doesn't just dump photos randomly on disk. It uses a configurable template to organize files systematically. The default template is:</p>
+
+                <pre><code>/upload/library/{userId}/{year}/{month}/{filename}</code></pre>
+
+                <p>So your dog photo from March 2026 might live at:</p>
+
+                <pre><code>/upload/library/abc123-def456.../2026/03/IMG_5678.jpg</code></pre>
+
+                <p>This structure has several benefits:</p>
+
+                <ul style="margin-left: var(--space-6); margin-bottom: var(--space-6);">
+                    <li style="margin-bottom: var(--space-2);">Easy to find files manually if needed (browse to the year/month folder)</li>
+                    <li style="margin-bottom: var(--space-2);">Users are isolated (each has their own folder)</li>
+                    <li style="margin-bottom: var(--space-2);">Backup is simpler (back up user folders separately)</li>
+                    <li style="margin-bottom: var(--space-2);">Performance stays good (folders don't get too large)</li>
+                </ul>
+
+                <div class="callout">
+                    <div class="callout-title">💡 Why This Matters for You</div>
+                    <div class="callout-content">
+                        <p>When building file storage features with AI tools, you need to think about organization strategy. A flat folder (all files in one directory) works for 100 files but breaks down at 100,000. Immich's template system is a pattern you can reuse — organize by user, then by time, to keep folders manageable.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Redis: The Speed Demon</h2>
+
+                <p>Immich also uses <span class="term" data-term="Redis">Redis</span>, an in-memory data store that's incredibly fast. Redis handles:</p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">📋</div>
+                        <div class="card-title">Job Queues</div>
+                        <div class="card-description">The to-do list of pending ML jobs. Redis is perfect for this because it's fast and supports queue operations natively.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🎫</div>
+                        <div class="card-title">Session Tokens</div>
+                        <div class="card-description">Your login tokens are cached in Redis for ultra-fast authentication checks. Checking Redis is faster than querying PostgreSQL.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">⚡</div>
+                        <div class="card-title">Temporary Data</div>
+                        <div class="card-description">Short-lived data that doesn't need to be permanent, like rate limiting counters or active upload sessions.</div>
+                    </div>
+                </div>
+
+                <p>Think of Redis like your brain's short-term memory — it's lightning fast but limited in capacity. PostgreSQL is long-term memory — slower but permanent and unlimited.</p>
+            </div>
+
+            <div class="section">
+                <h2>Quiz: Storage Architecture</h2>
+
+                <div class="quiz">
+                    <div class="quiz-question">
+                        <div class="question-text">1. You accidentally delete the PostgreSQL database but still have all the photo files on disk. What have you lost?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="11" data-answer="A">
+                                A) Everything — the photos are gone
+                            </div>
+                            <div class="quiz-option" data-question="11" data-answer="B">
+                                B) Only metadata — photos exist but are unsearchable and unorganized
+                            </div>
+                            <div class="quiz-option" data-question="11" data-answer="C">
+                                C) Nothing — the database can be rebuilt from files
+                            </div>
+                            <div class="quiz-option" data-question="11" data-answer="D">
+                                D) Only face recognition data
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="11"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">2. Why does Immich use Redis in addition to PostgreSQL?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="12" data-answer="A">
+                                A) Redis is cheaper than PostgreSQL
+                            </div>
+                            <div class="quiz-option" data-question="12" data-answer="B">
+                                B) Redis is in-memory and much faster for temporary data and queues
+                            </div>
+                            <div class="quiz-option" data-question="12" data-answer="C">
+                                C) PostgreSQL can't handle job queues
+                            </div>
+                            <div class="quiz-option" data-question="12" data-answer="D">
+                                D) Redis is required for face recognition
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="12"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 6: The Big Picture -->
+    <section class="module" id="module-6">
+        <div class="module-content wide">
+            <div class="section">
+                <div class="section-header">
+                    <div class="module-number">Module 6</div>
+                    <h1>The Big Picture: Putting It All Together</h1>
+                </div>
+
+                <p>You've learned the components, the data flows, the ML magic, and the storage architecture. Now let's zoom out and see how it all fits together as a complete system.</p>
+            </div>
+
+            <div class="section">
+                <h2>The Complete Architecture</h2>
+
+                <p>Here's the full Immich system at a glance:</p>
+
+                <div class="animation-container" style="padding: var(--space-12);">
+                    <div style="text-align: center; margin-bottom: var(--space-8);">
+                        <h3 style="margin-bottom: var(--space-6);">Full System Diagram</h3>
+
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6); margin-bottom: var(--space-8);">
+                            <div class="flow-node" style="background: #e8f4f8;">
+                                <div class="flow-node-title">Mobile App (Flutter)</div>
+                                <div class="flow-node-desc">iOS + Android</div>
+                            </div>
+                            <div class="flow-node" style="background: #e8f4f8;">
+                                <div class="flow-node-title">Web App (Svelte)</div>
+                                <div class="flow-node-desc">Browser Interface</div>
+                            </div>
+                        </div>
+
+                        <div style="font-size: var(--font-size-2xl); color: var(--color-accent); margin-bottom: var(--space-8);">↓</div>
+
+                        <div class="flow-node" style="background: #ffe8e1; margin-bottom: var(--space-8);">
+                            <div class="flow-node-title">API Server (NestJS)</div>
+                            <div class="flow-node-desc">Central coordinator, authentication, business logic</div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6);">
+                            <div class="flow-node" style="background: #f0ebe3;">
+                                <div class="flow-node-title">File Storage</div>
+                                <div class="flow-node-desc">Photos & videos</div>
+                            </div>
+                            <div class="flow-node" style="background: #f0ebe3;">
+                                <div class="flow-node-title">PostgreSQL</div>
+                                <div class="flow-node-desc">Metadata & search</div>
+                            </div>
+                            <div class="flow-node" style="background: #f0ebe3;">
+                                <div class="flow-node-title">Redis</div>
+                                <div class="flow-node-desc">Queues & cache</div>
+                            </div>
+                        </div>
+
+                        <div style="font-size: var(--font-size-2xl); color: var(--color-accent); margin: var(--space-8) 0;">↕</div>
+
+                        <div class="flow-node" style="background: #e8f0e8;">
+                            <div class="flow-node-title">ML Worker (Python)</div>
+                            <div class="flow-node-desc">CLIP, InsightFace, PaddleOCR</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Key Design Decisions and Why They Matter</h2>
+
+                <p>Immich's architecture isn't random — every choice solves a specific problem. Let's look at the key decisions and what you can learn from them:</p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">🧩</div>
+                        <div class="card-title">Separate ML Worker</div>
+                        <div class="card-description"><strong>Why:</strong> ML is slow and CPU-intensive. Separating it keeps the API fast. <strong>Lesson:</strong> Isolate expensive operations so they don't block critical paths.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">📦</div>
+                        <div class="card-title">Files on Disk, Metadata in DB</div>
+                        <div class="card-description"><strong>Why:</strong> Databases excel at queries, not binary files. <strong>Lesson:</strong> Use the right tool for the job — don't store large files in a database.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🔄</div>
+                        <div class="card-title">Job Queues (Redis)</div>
+                        <div class="card-description"><strong>Why:</strong> Asynchronous processing keeps uploads fast. <strong>Lesson:</strong> Queue slow tasks instead of making users wait.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🎯</div>
+                        <div class="card-title">Shared API for Web + Mobile</div>
+                        <div class="card-description"><strong>Why:</strong> One API means one source of truth and less code to maintain. <strong>Lesson:</strong> Build platform-agnostic APIs that any client can use.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🔐</div>
+                        <div class="card-title">JWT Authentication</div>
+                        <div class="card-description"><strong>Why:</strong> Stateless tokens scale better than sessions. <strong>Lesson:</strong> Stateless auth lets you add servers without sharing session state.</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🚀</div>
+                        <div class="card-title">Optional GPU Acceleration</div>
+                        <div class="card-description"><strong>Why:</strong> Makes ML feasible for large libraries. <strong>Lesson:</strong> Design for hardware optionality — work on CPU but fly on GPU.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>What You've Learned</h2>
+
+                <p>Congratulations! You now understand how Immich works from top to bottom. Here's what you can do with this knowledge:</p>
+
+                <div style="background: white; padding: var(--space-8); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin: var(--space-8) 0;">
+                    <h3 style="margin-bottom: var(--space-6); font-size: var(--font-size-2xl);">Your New Superpowers 🦸</h3>
+
+                    <div style="display: grid; gap: var(--space-4);">
+                        <div style="padding-left: var(--space-4); border-left: 3px solid var(--color-accent);">
+                            <strong>Steer AI Better:</strong> You can now give precise instructions like "modify the AssetService to add video transcoding" or "update the ML worker to use a different face recognition model."
+                        </div>
+
+                        <div style="padding-left: var(--space-4); border-left: 3px solid var(--color-accent);">
+                            <strong>Debug Issues:</strong> When something breaks, you know where to look. Upload failing? Check auth tokens and the API controller. Search not working? Check the ML worker and CLIP embeddings.
+                        </div>
+
+                        <div style="padding-left: var(--space-4); border-left: 3px solid var(--color-accent);">
+                            <strong>Make Architectural Decisions:</strong> Building a similar app? You now know patterns to follow: separate expensive operations, use job queues, store files on disk and metadata in a database.
+                        </div>
+
+                        <div style="padding-left: var(--space-4); border-left: 3px solid var(--color-accent);">
+                            <strong>Talk to Engineers:</strong> You have the vocabulary. You can discuss endpoints, embeddings, workers, schemas, and storage templates with confidence.
+                        </div>
+
+                        <div style="padding-left: var(--space-4); border-left: 3px solid var(--color-accent);">
+                            <strong>Spot AI Mistakes:</strong> If an AI tool suggests storing 5MB photos in PostgreSQL or running ML on the main API thread, you'll know that's wrong and can correct it.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Final Quiz: The Big Picture</h2>
+
+                <div class="quiz">
+                    <div class="quiz-question">
+                        <div class="question-text">1. You want to build a similar photo app but only need basic features (upload, view, share — no ML). Which components could you skip?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="13" data-answer="A">
+                                A) API server — just use file storage
+                            </div>
+                            <div class="quiz-option" data-question="13" data-answer="B">
+                                B) ML worker and Redis (no ML = no job queue needed)
+                            </div>
+                            <div class="quiz-option" data-question="13" data-answer="C">
+                                C) PostgreSQL — store everything in files
+                            </div>
+                            <div class="quiz-option" data-question="13" data-answer="D">
+                                D) Web app — mobile is enough
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="13"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">2. What's the single most important architectural pattern you learned from Immich?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="14" data-answer="A">
+                                A) Always use microservices for everything
+                            </div>
+                            <div class="quiz-option" data-question="14" data-answer="B">
+                                B) Separate slow/expensive operations from the critical path
+                            </div>
+                            <div class="quiz-option" data-question="14" data-answer="C">
+                                C) Never use databases for large files
+                            </div>
+                            <div class="quiz-option" data-question="14" data-answer="D">
+                                D) Always build mobile and web apps together
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="14"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">3. An AI tool suggests running face recognition directly in the browser using TensorFlow.js. Based on what you learned, what's a valid concern?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-question="15" data-answer="A">
+                                A) It won't work — browsers can't run ML
+                            </div>
+                            <div class="quiz-option" data-question="15" data-answer="B">
+                                B) Performance will vary wildly based on user's device (slow on old phones)
+                            </div>
+                            <div class="quiz-option" data-question="15" data-answer="C">
+                                C) Security risk — users can access the ML models
+                            </div>
+                            <div class="quiz-option" data-question="15" data-answer="D">
+                                D) It's illegal to run ML in the browser
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" data-question="15"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" style="text-align: center; padding: var(--space-16) 0;">
+                <h2 style="font-size: var(--font-size-4xl); margin-bottom: var(--space-6);">You Made It! 🎉</h2>
+                <p style="max-width: none; font-size: var(--font-size-lg); color: var(--color-text-secondary); margin-bottom: var(--space-8);">
+                    You now understand how a production-grade, AI-powered photo management system works from the inside out. Use this knowledge to build better software, debug faster, and steer AI coding tools like a pro.
+                </p>
+                <div style="background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-accent) 100%); padding: var(--space-6); border-radius: var(--radius-lg); color: white; max-width: 600px; margin: 0 auto;">
+                    <p style="margin: 0; font-weight: 600;">Want to dive deeper? Explore the Immich codebase on GitHub, contribute a feature, or build your own version with the patterns you learned here.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tooltip Container -->
+    <div class="tooltip" id="tooltip">
+        <div class="tooltip-term" id="tooltipTerm"></div>
+        <div id="tooltipContent"></div>
+    </div>
+
+    <script>
+        // Glossary definitions
+        const glossary = {
+            'API': 'Application Programming Interface — a waiter that takes your request and brings back what you asked for. In code, it\'s how one program talks to another.',
+            'backend': 'The server-side code that handles data, logic, and operations. Think of it as the kitchen in a restaurant — customers don\'t see it, but it does all the real work.',
+            'endpoint': 'A specific URL path that accepts requests, like /upload or /search. Each endpoint has a job — one uploads files, another searches, etc.',
+            'storage template': 'A pattern for organizing files on disk. Like having a rule: "all user photos go in /uploads/{userId}/{year}/{month}/" so you always know where to find them.',
+            'thumbnail': 'A small version of an image used for previews. Loading a 50KB thumbnail is much faster than loading a 5MB full-resolution photo.',
+            'EXIF': 'Exchangeable Image File Format — hidden data embedded in photos. Includes camera settings, GPS location, date/time, and more.',
+            'ExifTool': 'A popular command-line tool that reads and writes EXIF data from images and videos.',
+            'job queue': 'A to-do list for background tasks. Jobs (like "analyze this photo") are added to the queue and processed one at a time by a worker.',
+            'database': 'A structured system for storing and querying data. Like a smart filing cabinet where you can find things instantly by asking "show me all photos from 2024."',
+            'process': 'A running program in your computer\'s memory. Multiple processes can run at the same time, each doing their own work independently.',
+            'GPU': 'Graphics Processing Unit — a specialized chip designed for parallel math operations. Much faster than a CPU for AI and image processing.',
+            'authentication': 'Proving who you are to a system. Like showing ID at airport security — you prove you\'re allowed to access the system.',
+            'JWT': 'JSON Web Token — a compact, self-contained token that proves your identity. Like a wristband at a concert that shows you paid to get in.',
+            'vector search': 'Searching by concept similarity, not exact words. Finds things that are related even if they use different terminology. Like asking for "canine" and getting "dog" results.',
+            'token': 'A unique string of characters that acts as a temporary credential or permission slip. Can grant access, prove identity, or authorize actions.',
+            'embedding': 'A mathematical representation (list of numbers) that captures the meaning of something. Similar things have similar embeddings. Like fingerprints, but for concepts.',
+            'tables': 'Organized collections of data in a database, like spreadsheets. Each row is a record (e.g., one photo), each column is a property (e.g., upload date).',
+            'foreign keys': 'Database links that point from one table to another, creating relationships. Like saying "this face belongs to this photo" by storing the photo\'s ID.',
+            'Redis': 'An in-memory data store that\'s extremely fast. Used for caching and queues. Like your brain\'s short-term memory — fast but temporary.',
+        };
+
+        // Progress tracking
+        let currentModule = 1;
+        const totalModules = 6;
+
+        function updateProgress() {
+            const modules = document.querySelectorAll('.module');
+            const scrollPosition = window.scrollY + (window.innerHeight / 2);
+
+            modules.forEach((module, index) => {
+                const moduleTop = module.offsetTop;
+                const moduleBottom = moduleTop + module.offsetHeight;
+
+                if (scrollPosition >= moduleTop && scrollPosition < moduleBottom) {
+                    currentModule = index + 1;
+                }
+            });
+
+            const progress = (currentModule / totalModules) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `${Math.round(progress)}%`;
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -10% 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Scroll progress
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        updateProgress();
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                e.preventDefault();
+                const nextModule = document.getElementById(`module-${currentModule + 1}`);
+                if (nextModule) {
+                    nextModule.scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                const prevModule = document.getElementById(`module-${currentModule - 1}`);
+                if (prevModule) {
+                    prevModule.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+
+        // Tooltip functionality
+        const tooltip = document.getElementById('tooltip');
+        const tooltipTerm = document.getElementById('tooltipTerm');
+        const tooltipContent = document.getElementById('tooltipContent');
+
+        document.querySelectorAll('.term').forEach(term => {
+            term.addEventListener('mouseenter', (e) => {
+                const termKey = e.target.dataset.term;
+                const definition = glossary[termKey];
+
+                if (definition) {
+                    tooltipTerm.textContent = termKey;
+                    tooltipContent.textContent = definition;
+
+                    const rect = e.target.getBoundingClientRect();
+                    tooltip.style.left = `${rect.left}px`;
+                    tooltip.style.top = `${rect.bottom + 8}px`;
+                    tooltip.classList.add('visible');
+                }
+            });
+
+            term.addEventListener('mouseleave', () => {
+                tooltip.classList.remove('visible');
+            });
+
+            // Mobile touch support
+            term.addEventListener('click', (e) => {
+                e.preventDefault();
+                const termKey = e.target.dataset.term;
+                const definition = glossary[termKey];
+
+                if (definition) {
+                    tooltipTerm.textContent = termKey;
+                    tooltipContent.textContent = definition;
+
+                    const rect = e.target.getBoundingClientRect();
+                    tooltip.style.left = `${rect.left}px`;
+                    tooltip.style.top = `${rect.bottom + 8}px`;
+                    tooltip.classList.add('visible');
+
+                    setTimeout(() => {
+                        tooltip.classList.remove('visible');
+                    }, 5000);
+                }
+            });
+        });
+
+        // Close tooltip when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('term')) {
+                tooltip.classList.remove('visible');
+            }
+        });
+
+        // Quiz functionality
+        const quizData = {
+            '1': { correct: 'B', feedback: {
+                'B': 'Exactly! A favorite feature needs UI changes (mobile + web to show the button), API changes (to save the favorite state), and database changes (to store which photos are favorited). This is a full-stack feature.',
+                'A': 'Not quite. The UI button is just one piece. You also need to save the favorite state to the database and add an API endpoint to handle the request.',
+                'C': 'Close, but favorites need more than just database changes. You need UI (the button) and API endpoints (to handle favorite/unfavorite requests).',
+                'D': 'The ML worker analyzes photo content (faces, objects). Favorites are user preferences, not something detected by AI.'
+            }},
+            '2': { correct: 'B', feedback: {
+                'B': 'Exactly! Photos uploaded successfully means the API server and storage are working. But if they don\'t appear in search, the ML worker likely isn\'t processing the job queue — so the photos never get analyzed and tagged.',
+                'A': 'The mobile app version doesn\'t affect search results. If photos uploaded successfully, the app did its job.',
+                'C': 'If storage was full, uploads would fail entirely. The issue is that uploads succeed but search doesn\'t work.',
+                'D': 'Search permissions wouldn\'t cause *all* photos to be missing from search. The issue is that the photos were never analyzed by the ML worker.'
+            }},
+            '3': { correct: 'A', feedback: {
+                'A': 'Exactly! ML processing (face recognition, object detection) can take several seconds per photo. If this ran during upload, users would wait forever. Queuing it keeps uploads fast and instant.',
+                'B': 'ML processing is about analysis (faces, objects), not security scanning. The queue is for performance, not security.',
+                'C': 'While users *could* cancel jobs, the main reason is performance — keeping the upload experience fast.',
+                'D': 'Mobile apps *can* run ML models (many do), but Immich runs ML server-side for consistency and to leverage powerful GPU hardware.'
+            }},
+            '4': { correct: 'C', feedback: {
+                'C': 'Exactly! The API server (specifically the AssetService) would handle the rename request. It receives the new names from the web/mobile app, updates the database, and may update file storage if needed.',
+                'A': 'The ML worker analyzes photo content (faces, objects), not metadata like filenames. Renaming is handled by the API server.',
+                'B': 'The mobile app (or web app) sends the request, but the API server does the actual renaming. The client is just the interface.',
+                'D': 'PostgreSQL stores the names, but it doesn\'t handle the logic of renaming. The API server coordinates the rename operation and updates the database.'
+            }},
+            '5': { correct: 'B', feedback: {
+                'B': 'Exactly! Face detection happens in the ML worker. You\'d optimize the Python code, upgrade to a GPU, or switch to a faster face recognition model.',
+                'A': 'The API server doesn\'t run face recognition — it just adds jobs to the queue. The ML worker does the heavy lifting.',
+                'C': 'Redis helps with caching session data and job queues, but it doesn\'t make the actual face recognition faster. You need to optimize the ML worker.',
+                'D': 'The web app just displays results. Making face detection faster means optimizing the ML worker that generates those results.'
+            }},
+            '6': { correct: 'B', feedback: {
+                'B': 'Exactly! ML models are slow and CPU/GPU intensive. Running them separately means the API server can keep handling uploads and requests quickly without being bogged down by ML processing.',
+                'A': 'While isolation is good, the main reason is performance. ML is computationally expensive and would slow down everything else.',
+                'C': 'Cost isn\'t the reason. Python is used because the ML libraries (TensorFlow, PyTorch) are Python-based, and separation is for performance.',
+                'D': 'ML libraries can run in Node.js (via bindings), but the separation is an architectural choice for performance and scalability.'
+            }},
+            '7': { correct: 'B', feedback: {
+                'B': 'Exactly! Face recognition works but search doesn\'t — that means the InsightFace model is running, but CLIP (object detection) isn\'t. Check if the CLIP model is enabled and the worker is processing those jobs.',
+                'A': 'The search endpoint itself is probably fine. The issue is that photos don\'t have searchable tags because the ML worker hasn\'t analyzed them.',
+                'C': 'Database storage is separate. A full database wouldn\'t prevent search; it would prevent uploads entirely.',
+                'D': 'Authentication wouldn\'t cause selective issues. If auth was broken, you couldn\'t upload or use face recognition either.'
+            }},
+            '8': { correct: 'B', feedback: {
+                'B': 'Exactly! Every API request requires a valid JWT token. The server verifies it before processing the request. This proves you\'re authenticated and authorized.',
+                'A': 'Password encryption protects stored passwords, but it doesn\'t verify ongoing requests. That\'s what tokens do.',
+                'C': 'Rate limiting prevents brute force attacks but doesn\'t authenticate requests. It just limits how many attempts you can make.',
+                'D': 'HTTPS encrypts the connection but doesn\'t verify identity. You still need tokens to prove who you are.'
+            }},
+            '9': { correct: 'B', feedback: {
+                'B': 'Exactly! CLIP uses embeddings to find conceptually similar images. Sunset and sunrise are visually and conceptually similar (sky, colors, light), so they have similar embeddings.',
+                'A': 'The model is working correctly — this is how embedding-based search works. It finds conceptual matches, not just exact keywords.',
+                'C': 'Tags are generated by the ML model, not manually entered. The model correctly identifies both as similar sky scenes.',
+                'D': 'This is intentional behavior, not a bug. Semantic search is designed to find related concepts.'
+            }},
+            '10': { correct: 'B', feedback: {
+                'B': 'Exactly! GPU acceleration speeds up ML processing by 10-25x. With 10,000 photos, this is the single biggest performance boost you can make.',
+                'A': 'RAM helps but isn\'t the bottleneck for ML processing. The bottleneck is computation speed (CPU vs GPU).',
+                'C': 'A faster CPU helps, but GPUs are specifically designed for ML workloads and are much faster.',
+                'D': 'Reducing resolution might speed things up slightly, but GPU acceleration gives far better results without sacrificing quality.'
+            }},
+            '11': { correct: 'B', feedback: {
+                'B': 'Exactly! The photo files still exist on disk, but all metadata (tags, embeddings, ownership, dates) is gone. The photos are orphaned — you have the data but no way to search or organize it.',
+                'A': 'The files themselves are on disk, not in the database. You\'d still have the photos, just no metadata about them.',
+                'C': 'You can\'t fully rebuild the database from files. Some metadata (like embeddings and tags) would require re-running ML analysis. Other data (like favorites, albums) would be lost forever.',
+                'D': 'You\'d lose ALL metadata — face data, search embeddings, ownership, dates, everything. Only the raw photo files would remain.'
+            }},
+            '12': { correct: 'B', feedback: {
+                'B': 'Exactly! Redis is in-memory, so it\'s much faster than PostgreSQL for frequently accessed data like job queues and session tokens. It\'s optimized for speed over persistence.',
+                'A': 'Cost isn\'t the reason — Redis and PostgreSQL have similar hosting costs. The benefit is performance.',
+                'C': 'PostgreSQL can handle job queues, but Redis is much better suited for high-throughput queue operations.',
+                'D': 'Redis isn\'t specific to face recognition. It\'s used for queues and caching across the entire application.'
+            }},
+            '13': { correct: 'B', feedback: {
+                'B': 'Exactly! Without ML features, you don\'t need the ML worker. And without the ML worker, you don\'t need Redis for job queues (though you might still use it for session caching).',
+                'A': 'The API server is essential — it handles authentication, uploads, and serves photos. You can\'t skip it.',
+                'C': 'You still need PostgreSQL to store metadata (user accounts, photo ownership, upload dates, etc.). Files alone aren\'t enough.',
+                'D': 'Whether you need web + mobile depends on user needs, not ML features. You could skip one, but that\'s separate from the ML decision.'
+            }},
+            '14': { correct: 'B', feedback: {
+                'B': 'Exactly! The core lesson is: expensive operations (like ML) should run asynchronously, not blocking critical user actions (like uploads). This applies to any system with slow background tasks.',
+                'A': 'Immich isn\'t a microservices architecture — it\'s a modular monolith with separate workers. Microservices aren\'t always necessary.',
+                'C': 'This is true but too specific. The broader lesson is about separating concerns and using the right tool for the job.',
+                'D': 'Building mobile and web together is nice but not a fundamental architectural principle. It\'s a product decision.'
+            }},
+            '15': { correct: 'B', feedback: {
+                'B': 'Exactly! Browser-based ML depends on the user\'s hardware. It\'ll be fast on a new iPhone but unusably slow on a 5-year-old Android. Server-side ML gives consistent performance.',
+                'A': 'Browsers can run ML using TensorFlow.js or WASM. It works, just with performance trade-offs.',
+                'C': 'ML models are client-side in browser ML, so users can technically access them. But that\'s not usually a security issue for face recognition (the models are public anyway).',
+                'D': 'There\'s nothing illegal about running ML in the browser. It\'s a common approach for privacy-focused apps.'
+            }}
+        };
+
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const question = option.dataset.question;
+                const answer = option.dataset.answer;
+                const correct = quizData[question].correct;
+                const feedback = document.querySelector(`[data-question="${question}"].quiz-feedback`);
+
+                // Clear previous selections
+                document.querySelectorAll(`[data-question="${question}"].quiz-option`).forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+
+                option.classList.add('selected');
+
+                if (answer === correct) {
+                    option.classList.add('correct');
+                    feedback.classList.add('visible', 'correct');
+                    feedback.classList.remove('incorrect');
+                } else {
+                    option.classList.add('incorrect');
+                    feedback.classList.add('visible', 'incorrect');
+                    feedback.classList.remove('correct');
+                }
+
+                feedback.textContent = quizData[question].feedback[answer];
+            });
+        });
+
+        // ML Chat Animation (Module 1)
+        const mlChat = document.getElementById('mlChatAnimation');
+        const mlMessages = [
+            { sender: 'API', avatar: '🔧', text: 'Hey ML Worker, I just saved a new photo to /uploads/user123/dog.jpg. Can you analyze it?' },
+            { sender: 'ML', avatar: '🧠', text: 'On it! Pulling the photo from storage now...' },
+            { sender: 'ML', avatar: '🧠', text: 'Running CLIP model... detected: dog, grass, outdoor, sunny' },
+            { sender: 'ML', avatar: '🧠', text: 'Running face detection... no faces found in this one' },
+            { sender: 'ML', avatar: '🧠', text: 'All done! Saved tags to the database. This photo is now searchable.' },
+            { sender: 'API', avatar: '🔧', text: 'Perfect, thanks! User can now search for "dog" and find it.' }
+        ];
+
+        // Components Chat Animation (Module 2)
+        const componentsChat = document.getElementById('componentsChat');
+        const compMessages = [
+            { sender: 'Web App', avatar: '🌐', text: 'User wants to see all photos from March 2026. API, can you help?' },
+            { sender: 'API', avatar: '🔧', text: 'Sure! Let me check if they\'re authenticated first... yep, valid session token.' },
+            { sender: 'API', avatar: '🔧', text: 'PostgreSQL, give me all photos for user123 from March 2026.' },
+            { sender: 'Database', avatar: '🗄️', text: 'Found 247 photos. Here\'s the list with metadata and file paths.' },
+            { sender: 'API', avatar: '🔧', text: 'Got it. Web App, here are the photos formatted as JSON.' },
+            { sender: 'Web App', avatar: '🌐', text: 'Thanks! Rendering the gallery now...' }
+        ];
+
+        // Sharing Chat Animation (Module 3)
+        const sharingChat = document.getElementById('sharingChat');
+        const sharingMessages = [
+            { sender: 'User', avatar: '👤', text: 'I want to share my vacation photos with a friend. They don\'t have an account.' },
+            { sender: 'Web App', avatar: '🌐', text: 'API, create a shared link for album #456.' },
+            { sender: 'API', avatar: '🔧', text: 'Generating a unique token... abc123xyz. Saving to shared_links table.' },
+            { sender: 'API', avatar: '🔧', text: 'Done! Here\'s the link: https://immich.app/share/abc123xyz' },
+            { sender: 'Web App', avatar: '🌐', text: 'User, here\'s your shareable link. Anyone with this link can view those photos.' },
+            { sender: 'Friend', avatar: '👥', text: '*clicks link*' },
+            { sender: 'API', avatar: '🔧', text: 'Checking token abc123xyz... valid! Serving photos from album #456.' }
+        ];
+
+        // Animate chats when they become visible
+        const mlChatObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.target.childElementCount === 0) {
+                    let messages;
+                    if (entry.target.id === 'mlChatAnimation') {
+                        messages = mlMessages;
+                    } else if (entry.target.id === 'componentsChat') {
+                        messages = compMessages;
+                    } else if (entry.target.id === 'sharingChat') {
+                        messages = sharingMessages;
+                    }
+
+                    if (messages) {
+                        messages.forEach((msg, index) => {
+                            setTimeout(() => {
+                                const messageEl = document.createElement('div');
+                                messageEl.className = 'chat-message';
+                                messageEl.style.animationDelay = '0s';
+
+                                messageEl.innerHTML = `
+                                    <div class="chat-avatar">${msg.avatar}</div>
+                                    <div class="chat-bubble">
+                                        <div class="chat-sender">${msg.sender}</div>
+                                        <div class="chat-text">${msg.text}</div>
+                                    </div>
+                                `;
+
+                                entry.target.appendChild(messageEl);
+                            }, index * 800);
+                        });
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        if (mlChat) mlChatObserver.observe(mlChat);
+        if (componentsChat) mlChatObserver.observe(componentsChat);
+        if (sharingChat) mlChatObserver.observe(sharingChat);
+    </script>
+</body>
+</html>
